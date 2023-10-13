@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-
     private final CategoryService categoryService;
 
     @GetMapping("/menu")
@@ -29,6 +28,11 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
         return "index";
+    }
+
+    @GetMapping("/test")
+    public String testEndpoint() {
+        return "Test successful!";
     }
 
 

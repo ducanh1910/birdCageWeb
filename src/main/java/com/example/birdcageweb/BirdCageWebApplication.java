@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 public class BirdCageWebApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(BirdCageWebApplication.class, args);
     }
-
 }

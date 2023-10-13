@@ -1,20 +1,17 @@
 package service.impl;
 
 import dto.ProductDto;
-import model.Product;
-import repository.ProductRepository;
-import service.ProductService;
-import utils.ImageUpload;
 import lombok.RequiredArgsConstructor;
+import model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import repository.ProductRepository;
+import service.ProductService;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -22,10 +19,6 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
-    @Override
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
 
     @Override
     public List<ProductDto> products() {
@@ -39,73 +32,6 @@ public class ProductServiceImpl implements ProductService {
         return productDtos;
     }
 
-    @Override
-    public Product save(MultipartFile imageProduct, ProductDto productDto) {
-        Product product = new Product();
-        try {
-            if (imageProduct == null) {
-                product.setImage(null);
-            } else {
-                ImageUpload.uploadFile(imageProduct);
-                product.setImage(Base64.getEncoder().encodeToString(imageProduct.getBytes()));
-            }
-            product.setName(productDto.getName());
-            product.setDescription(productDto.getDescription());
-            product.setCurrentQuantity(productDto.getCurrentQuantity());
-            product.setCostPrice(productDto.getCostPrice());
-            product.setCategory(productDto.getCategory());
-            product.setDeleted(false);
-            product.setActivated(true);
-            return productRepository.save(product);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
-    public Product update(MultipartFile imageProduct, ProductDto productDto) {
-        try {
-            Product productUpdate = productRepository.getById(productDto.getId());
-            if (imageProduct == null) {
-                productUpdate.setImage(productUpdate.getImage());
-            } else {
-                if (ImageUpload.checkExist(imageProduct)) {
-                    productUpdate.setImage(productUpdate.getImage());
-                } else {
-                    ImageUpload.uploadFile(imageProduct);
-                    productUpdate.setImage(Base64.getEncoder().encodeToString(imageProduct.getBytes()));
-                }
-            }
-            productUpdate.setCategory(productDto.getCategory());
-            productUpdate.setId(productUpdate.getId());
-            productUpdate.setName(productDto.getName());
-            productUpdate.setDescription(productDto.getDescription());
-            productUpdate.setCostPrice(productDto.getCostPrice());
-            productUpdate.setSalePrice(productDto.getSalePrice());
-            productUpdate.setCurrentQuantity(productDto.getCurrentQuantity());
-            return productRepository.save(productUpdate);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
-    public void enableById(Long id) {
-        Product product = productRepository.getById(id);
-        product.setActivated(true);;
-        product.setDeleted(false);
-        productRepository.save(product);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        Product product = productRepository.getById(id);
-        product.setDeleted(true);
-        product.setActivated(false);
-        productRepository.save(product);
-    }
 
     @Override
     public ProductDto getById(Long id) {
@@ -120,11 +46,6 @@ public class ProductServiceImpl implements ProductService {
         productDto.setCategory(product.getCategory());
         productDto.setImage(product.getImage());
         return productDto;
-    }
-
-    @Override
-    public Product findById(Long id) {
-        return productRepository.findById(id).get();
     }
 
     @Override

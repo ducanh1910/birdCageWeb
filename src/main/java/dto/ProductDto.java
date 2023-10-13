@@ -17,6 +17,6 @@ public class ProductDto {
     private int currentQuantity;
     private Category category;
     private String image;
-    private boolean activated;
-    private boolean deleted;
+    private boolean isActivated;
+    private boolean isDeleted;
 }

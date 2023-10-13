@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class CategoryDto {
     private Long Id;
     private String Name;
-
+    private boolean isActivated;
+    private boolean isDeleted;
 }
